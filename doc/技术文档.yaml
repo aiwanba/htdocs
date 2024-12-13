@@ -1,0 +1,355 @@
+# 多人在线股票交易游戏技术实现文档
+ 提示：
+ 数据库表:cs_aiwanba_net
+ 数据库用户名:cs_aiwanba_net
+ 数据库密码:pYjRdbdmfEEsKZd2
+
+## 1. 技术架构
+
+### 1.1 技术选型
+- PHP 7.4+
+- MySQL 8.0+
+- Apache/Nginx
+
+### 1.2 开发规范
+- 纯PHP实现前后端
+- 面向过程编程
+- 原生SQL操作
+- 会话管理认证
+
+## 2. 系统模块
+
+### 2.1 用户模块
+- 用户注册登录
+- 个人资料管理
+- 资金账户管理
+- 权限控制
+
+### 2.2 交易模块
+- 股票买卖
+- 订单管理
+- 撮合系统
+- 成交记录
+- 交易限制
+
+### 2.3 公司模块
+- 公司注册
+- IPO申请
+- 公司管理
+- 财务报表
+- 股东大会
+
+### 2.4 股票模块
+- 实时报价
+- 交易行情
+- 走势图表
+- 成交统计
+
+## 3. 数据库设计
+
+### 3.1 用户相关表
+users:
+  - id: 用户ID
+  - username: 用户名
+  - password: 密码哈希
+  - balance: 账户余额
+  - status: 状态
+  - created_at: 创建时间
+
+user_logs:
+  - id: 日志ID
+  - user_id: 用户ID
+  - action: 操作类型
+  - details: 详细信息
+  - created_at: 操作时间
+
+### 3.2 交易相关表
+orders:
+  - id: 订单ID
+  - user_id: 用户ID
+  - stock_id: 股票ID
+  - type: 买卖类型
+  - price: 价格
+  - amount: ���量
+  - status: 状态
+  - created_at: 创建时间
+
+transactions:
+  - id: 成交ID
+  - order_id: 订单ID
+  - buyer_id: 买方ID
+  - seller_id: 卖方ID
+  - stock_id: 股票ID
+  - price: 成交价
+  - amount: 成交量
+  - created_at: 成交时间
+
+### 3.3 公司相关表
+companies:
+  - id: 公司ID
+  - name: 公司名称
+  - owner_id: 创建者ID
+  - capital: 注册资本
+  - status: 状态
+  - created_at: 创建时间
+
+stocks:
+  - id: 股票ID
+  - company_id: 公司ID
+  - total_shares: 总股本
+  - current_price: 当前价格
+  - status: 状态
+  - updated_at: 更新时间
+
+## 4. 核心功能实现
+
+### 4.1 用户功能
+- 注册登录验证
+- 资金账户管理
+- 持仓管理
+- 交易权限控制
+
+### 4.2 交易功能
+- 订单创建验证
+- 价格撮合机制
+- 成交记录生成
+- 资金清算处理
+
+### 4.3 公司功能
+- 公司信息管理
+- IPO流程处理
+- 股东投票
+- 分红派息
+
+### 4.4 行情功能
+- 实时价格更新
+- 成交量统计
+- 涨跌幅计算
+- 走势图生成
+
+## 5. 系统安全
+
+### 5.1 访问安全
+- 会话管理
+- 登录验证
+- 权限控制
+- 操作审计
+
+### 5.2 数据安全
+- SQL注入防护
+- XSS过滤
+- 密码加密
+- 敏感数据保护
+
+### 5.3 交易安全
+- 余额检查
+- 持仓验证
+- 价格限制
+- 操作频率控制
+
+## 6. 性能优���
+
+### 6.1 数据库优化
+- 索引设计
+- 查询优化
+- 连接池管理
+- 定期清理
+
+### 6.2 并发处理
+- 交易锁机制
+- 库存锁定
+- 死锁预防
+- 并发队列
+
+## 7. 监控日志
+
+### 7.1 系统监控
+- 服务状态
+- 性能指标
+- 异常监控
+- 访问统计
+
+### 7.2 业务日志
+- 用户操作日志
+- 交易日志
+- 错误日志
+- 安全日志
+
+## 8. 目录结构
+
+### 8.1 根目录文件
+- index.php              # 入口文件
+- config.php            # 配置文件
+- functions.php         # 全局函数
+- database.php          # 数据库连接
+- .htaccess            # URL重写规则
+
+### 8.2 核心目录
+includes/               # 页面和功能文件
+  common/              # 公共文件
+    header.php        # 页面头部
+    footer.php        # 页面底部
+    menu.php          # 导航菜单
+    functions.php     # 公共函数
+  
+  user/               # 用户相关
+    login.php        # 登录页面
+    register.php     # 注册页面
+    profile.php      # 个人资料
+    balance.php      # 资金管理
+    
+  trade/             # 交易相关
+    list.php         # 交易列表
+    order.php        # 下单页面
+    match.php        # 撮合处理
+    history.php      # 交易历史
+    position.php     # 持仓查询
+    
+  company/           # 公司相关
+    create.php       # 创建公司
+    manage.php       # 管理页面
+    ipo.php          # IPO申请
+    report.php       # 财务报表
+    dividend.php     # 分红派息
+    
+  stock/             # 股票相关
+    quote.php        # 报价页面
+    chart.php        # 走势图
+    detail.php       # 股票详情
+    market.php       # 市场行情
+
+### 8.3 功能库目录
+lib/                   # 核心功能库
+  db/                 # 数据库相关
+    mysql.php        # MySQL操作
+    query.php        # SQL查询
+    transaction.php  # 事务处理
+    
+  user/              # 用户功能
+    auth.php         # 用户认证
+    profile.php      # 资料管理
+    account.php      # 账户管理
+    
+  trade/             # 交易功能
+    order.php        # 订单处理
+    match.php        # 撮合系统
+    settlement.php   # 清算处理
+    
+  company/           # 公司功能
+    manage.php       # 公司管理
+    ipo.php          # IPO处理
+    finance.php      # 财务处理
+    
+  stock/             # 股票功能
+    quote.php        # 报价处理
+    chart.php        # 图表生成
+    market.php       # 行情处理
+    
+  security/          # 安全相关
+    filter.php       # 输入过滤
+    encrypt.php      # 加密处理
+    session.php      # 会话管理
+    
+  utils/             # 工具类
+    logger.php       # 日志处理
+    validator.php    # 数据验证
+    helper.php       # 辅助函数
+
+### 8.4 模板目录
+templates/             # 模板文件
+  user/              # 用户模板
+    login.php        # 登录表单
+    register.php     # 注册表单
+    profile.php      # 资料表单
+    
+  trade/             # 交易模板
+    order.php        # 下单表单
+    list.php         # 列表展示
+    
+  company/           # 公司模板
+    create.php       # 创建表单
+    manage.php       # 管理页面
+    
+  stock/             # 股票模板
+    quote.php        # 报价展示
+    chart.php        # 图表模板
+
+### 8.5 资源目录
+assets/               # 静态资源
+  css/              # 样式文件
+    main.css        # 主样式
+    trade.css       # 交易样式
+    company.css     # 公司样式
+    
+  images/           # 图片资源
+    logo/          # Logo图片
+    icons/         # 图标文件
+    upload/        # 上传文件
+
+### 8.6 数据目录
+database/             # 数据库文件
+  migrations/        # 数据库迁移
+  seeds/            # 数据填充
+  backup/           # 备份文件
+  schema.sql        # 数据库结构
+
+### 8.7 日志目录
+logs/                 # 日志文件
+  error/            # 错误日志
+  access/           # 访问日志
+  trade/            # 交易日志
+  security/         # 安全日志
+
+## 9. 文件说明
+
+### 9.1 核心文件
+index.php:
+  - 应用入口文件
+  - 初始化配置
+  - 路由分发
+  - 页面渲染
+
+config.php:
+  - 数据库配置
+  - 系统配置
+  - 安全配置
+  - 功能配置
+
+functions.php:
+  - 全局函数定义
+  - 辅助函数
+  - 工具函数
+
+### 9.2 功能文件
+lib/trade/match.php:
+  - 订单撮合系统
+  - 价格匹配逻辑
+  - 成交处理
+  - 资金结算
+
+lib/company/ipo.php:
+  - IPO申请处理
+  - 股份发行
+  - 定价机制
+  - 认购处理
+
+lib/stock/quote.php:
+  - 实时报价更新
+  - 价格计算
+  - 涨跌幅限制
+  - 成交量统计
+
+### 9.3 模板文件
+templates/trade/order.php:
+  - 交易下单界面
+  - 表单验证
+  - 数据提交
+  - 结果展示
+
+templates/company/manage.php:
+  - 公司管理界面
+  - 信息展示
+  - 操作处理
+  - 数据更新
+
+
