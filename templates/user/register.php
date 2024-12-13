@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo SITE_NAME; ?> - 用户注册</title>
+    <title>注册 - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="/assets/css/main.css">
 </head>
 <body>
-    <div class="register-container">
-        <h2>用户注册</h2>
-        
-        <?php if (isset($error)): ?>
-            <div class="error-message"><?php echo $error; ?></div>
-        <?php endif; ?>
-        
-        <form method="POST" action="/user/register.php">
-            <div class="form-group">
-                <label>用户名:</label>
-                <input type="text" name="username" required minlength="4">
-                <small>至少4个字符</small>
-            </div>
+    <?php include 'templates/common/header.php'; ?>
+    
+    <div class="container">
+        <div class="auth-form">
+            <h2>用户注册</h2>
             
-            <div class="form-group">
-                <label>密码:</label>
-                <input type="password" name="password" required minlength="6">
-                <small>至少6个字符</small>
-            </div>
+            <?php if ($error): ?>
+                <div class="alert alert-error"><?php echo $error; ?></div>
+            <?php endif; ?>
             
-            <div class="form-group">
-                <label>电子邮箱:</label>
-                <input type="email" name="email" required>
-            </div>
+            <form method="POST" action="/register.php">
+                <div class="form-group">
+                    <label>用户名:</label>
+                    <input type="text" name="username" value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>" required>
+                    <small>用户名只能包含字母、数字和下划线</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>邮箱:</label>
+                    <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>密码:</label>
+                    <input type="password" name="password" required minlength="6">
+                    <small>密码长度不能少于6个字符</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>确认密码:</label>
+                    <input type="password" name="confirm_password" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn-submit">注册</button>
+            </form>
             
-            <div class="form-group">
-                <button type="submit">注册</button>
-                <a href="/user/login.php">返回登录</a>
+            <div class="auth-links">
+                已有账号？<a href="/login.php">立即登录</a>
             </div>
-        </form>
+        </div>
     </div>
+    
+    <?php include 'templates/common/footer.php'; ?>
 </body>
 </html> 

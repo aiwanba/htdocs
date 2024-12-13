@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../lib/database.php';
+
 class StockManager {
     private $db;
     

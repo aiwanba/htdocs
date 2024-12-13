@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../lib/database.php';
+
 class BackupManager {
     private $db;
     private $backup_dir = 'backups/';

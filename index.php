@@ -22,6 +22,12 @@ $action = isset($_GET['action']) ? clean_input($_GET['action']) : 'index';
 
 // 根据路由加载相应的控制器
 switch ($page) {
+    case 'register':
+        require_once 'includes/user/register.php';
+        break;
+    case 'login':
+        require_once 'includes/user/login.php';
+        break;
     case 'user':
         require_once 'includes/user/' . $action . '.php';
         break;

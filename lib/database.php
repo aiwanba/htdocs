@@ -56,5 +56,7 @@ class Database {
     private function __clone() {}
     
     // 防止反序列化
-    private function __wakeup() {}
+    public function __wakeup() {
+        throw new Exception("不能反序列化单例");
+    }
 } 

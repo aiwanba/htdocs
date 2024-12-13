@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../lib/database.php';
+
 class MaintenanceManager {
     private $db;
     private $config_file = 'config/maintenance.php';
