@@ -1,10 +1,11 @@
 <?php
-require_once 'config.php';
-require_once 'database.php';
-require_once 'functions.php';
-
-// 启动会话
 session_start();
+require_once 'config/site.php';
+require_once 'config/database.php';
+require_once 'lib/utils.php';
+
+// 设置时区
+date_default_timezone_set(TIMEZONE);
 
 // 设置错误报告
 if (DEBUG_MODE) {
