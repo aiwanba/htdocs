@@ -2,7 +2,9 @@
 session_start();
 require_once 'config/site.php';
 require_once 'config/database.php';
+require_once 'lib/database.php';
 require_once 'lib/utils.php';
+require_once 'lib/security.php';
 
 // 设置时区
 date_default_timezone_set(TIMEZONE);

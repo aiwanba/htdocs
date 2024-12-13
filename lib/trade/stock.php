@@ -14,11 +14,11 @@ class StockManager {
             "SELECT s.*, c.name as company_name,
                     (s.current_price - s.open_price) / s.open_price as price_change,
                     s.current_price * s.total_shares as market_value,
-                    (SELECT COALESCE(SUM(amount), 0) FROM transactions 
+                    (SELECT COALESCE(SUM(amount), 0) FROM cs_transactions 
                      WHERE stock_id = s.id 
                      AND DATE(created_at) = CURDATE()) as volume
-             FROM stocks s
-             JOIN companies c ON s.company_id = c.id
+             FROM cs_stocks s
+             JOIN cs_companies c ON s.company_id = c.id
              WHERE s.status = 'active'
              ORDER BY volume DESC
              LIMIT :limit"
@@ -32,8 +32,8 @@ class StockManager {
     public function getLatestIPOs($limit = 5) {
         $stmt = $this->db->prepare(
             "SELECT s.*, c.name as company_name
-             FROM stocks s
-             JOIN companies c ON s.company_id = c.id
+             FROM cs_stocks s
+             JOIN cs_companies c ON s.company_id = c.id
              WHERE s.status = 'active'
              ORDER BY s.list_time DESC
              LIMIT :limit"
@@ -46,10 +46,10 @@ class StockManager {
     // 获取最新交易记录
     public function getLatestTrades($limit = 10) {
         $stmt = $this->db->prepare(
-            "SELECT t.*, c.name as company_name
-             FROM transactions t
-             JOIN stocks s ON t.stock_id = s.id
-             JOIN companies c ON s.company_id = c.id
+            "SELECT t.*, s.current_price, c.name as company_name
+             FROM cs_transactions t
+             JOIN cs_stocks s ON t.stock_id = s.id
+             JOIN cs_companies c ON s.company_id = c.id
              ORDER BY t.created_at DESC
              LIMIT :limit"
         );
@@ -65,7 +65,7 @@ class StockManager {
         // 总市值
         $stmt = $this->db->prepare(
             "SELECT COALESCE(SUM(s.current_price * s.total_shares), 0) as total
-             FROM stocks s
+             FROM cs_stocks s
              WHERE s.status = 'active'"
         );
         $stmt->execute();
@@ -74,7 +74,7 @@ class StockManager {
         // 上市公司数
         $stmt = $this->db->prepare(
             "SELECT COUNT(*) as total
-             FROM stocks s
+             FROM cs_stocks s
              WHERE s.status = 'active'"
         );
         $stmt->execute();
@@ -83,7 +83,7 @@ class StockManager {
         // 今日成交额
         $stmt = $this->db->prepare(
             "SELECT COALESCE(SUM(price * amount), 0) as total
-             FROM transactions
+             FROM cs_transactions
              WHERE DATE(created_at) = CURDATE()"
         );
         $stmt->execute();
@@ -98,8 +98,8 @@ class StockManager {
             "SELECT s.*, c.name as company_name, c.description,
                     c.owner_id, c.created_at as company_created_at,
                     (s.current_price - s.open_price) / s.open_price as price_change
-             FROM stocks s
-             JOIN companies c ON s.company_id = c.id
+             FROM cs_stocks s
+             JOIN cs_companies c ON s.company_id = c.id
              WHERE s.id = :stock_id"
         );
         $stmt->bindValue(':stock_id', $stock_id, PDO::PARAM_INT);

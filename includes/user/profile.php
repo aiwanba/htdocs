@@ -8,7 +8,7 @@ $success = '';
 // 获取用户信息
 $db = Database::getInstance()->getConnection();
 $stmt = $db->prepare(
-    "SELECT * FROM users WHERE id = ?"
+    "SELECT * FROM cs_users WHERE id = ?"
 );
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // 更新邮箱
             if ($email !== $user['email']) {
                 $stmt = $db->prepare(
-                    "SELECT id FROM users WHERE email = ? AND id != ?"
+                    "SELECT id FROM cs_users WHERE email = ? AND id != ?"
                 );
                 $stmt->execute([$email, $_SESSION['user_id']]);
                 if ($stmt->rowCount() > 0) {
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 
                 $stmt = $db->prepare(
-                    "UPDATE users SET email = ? WHERE id = ?"
+                    "UPDATE cs_users SET email = ? WHERE id = ?"
                 );
                 $stmt->execute([$email, $_SESSION['user_id']]);
             }
@@ -55,14 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($new_password)) {
                 $hash = generate_password_hash($new_password);
                 $stmt = $db->prepare(
-                    "UPDATE users SET password = ? WHERE id = ?"
+                    "UPDATE cs_users SET password = ? WHERE id = ?"
                 );
                 $stmt->execute([$hash, $_SESSION['user_id']]);
             }
             
             // 记录日志
             $stmt = $db->prepare(
-                "INSERT INTO user_logs (user_id, action, ip_address, created_at)
+                "INSERT INTO cs_user_logs (user_id, action, ip_address, created_at)
                  VALUES (?, 'update_profile', ?, NOW())"
             );
             $stmt->execute([$_SESSION['user_id'], $_SERVER['REMOTE_ADDR']]);
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             // 重新获取用户信息
             $stmt = $db->prepare(
-                "SELECT * FROM users WHERE id = ?"
+                "SELECT * FROM cs_users WHERE id = ?"
             );
             $stmt->execute([$_SESSION['user_id']]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);

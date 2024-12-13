@@ -1,10 +1,10 @@
 -- 用户表
-CREATE TABLE users (
+CREATE TABLE cs_users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    balance DECIMAL(15,2) NOT NULL DEFAULT 0,
+    password VARCHAR(255) NOT NULL,
+    balance DECIMAL(15,2) NOT NULL DEFAULT 0.00,
     status ENUM('active', 'blocked') NOT NULL DEFAULT 'active',
     last_active DATETIME,
     created_at DATETIME NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 管理员表
-CREATE TABLE admin_users (
+CREATE TABLE cs_admin_users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -22,18 +22,19 @@ CREATE TABLE admin_users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 公司表
-CREATE TABLE companies (
+CREATE TABLE cs_companies (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
     description TEXT,
-    owner_id INT UNSIGNED NOT NULL,
-    status ENUM('pending', 'active', 'suspended') NOT NULL DEFAULT 'pending',
+    owner_id INT UNSIGNED,
+    status ENUM('active', 'delisted') NOT NULL DEFAULT 'active',
     created_at DATETIME NOT NULL,
-    FOREIGN KEY (owner_id) REFERENCES users(id)
+    updated_at DATETIME NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES cs_users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 股票表
-CREATE TABLE stocks (
+CREATE TABLE cs_stocks (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     company_id INT UNSIGNED NOT NULL,
     total_shares BIGINT UNSIGNED NOT NULL,
@@ -41,28 +42,30 @@ CREATE TABLE stocks (
     open_price DECIMAL(10,2) NOT NULL,
     high_price DECIMAL(10,2) NOT NULL,
     low_price DECIMAL(10,2) NOT NULL,
-    status ENUM('pending', 'active', 'suspended') NOT NULL DEFAULT 'pending',
-    list_time DATETIME,
-    FOREIGN KEY (company_id) REFERENCES companies(id)
+    status ENUM('active', 'suspended', 'delisted') NOT NULL DEFAULT 'active',
+    list_time DATETIME NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES cs_companies(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 交易表
-CREATE TABLE transactions (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+-- 交易记录表
+CREATE TABLE cs_transactions (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
     stock_id INT UNSIGNED NOT NULL,
-    seller_id INT UNSIGNED NOT NULL,
-    buyer_id INT UNSIGNED NOT NULL,
+    type ENUM('buy', 'sell') NOT NULL,
+    amount INT UNSIGNED NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    amount BIGINT UNSIGNED NOT NULL,
-    fee DECIMAL(10,2) NOT NULL,
+    status ENUM('pending', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
     created_at DATETIME NOT NULL,
-    FOREIGN KEY (stock_id) REFERENCES stocks(id),
-    FOREIGN KEY (seller_id) REFERENCES users(id),
-    FOREIGN KEY (buyer_id) REFERENCES users(id)
+    updated_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES cs_users(id),
+    FOREIGN KEY (stock_id) REFERENCES cs_stocks(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 系统收入表
-CREATE TABLE system_income (
+CREATE TABLE cs_system_income (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     type ENUM('trade_fee', 'ipo_fee') NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
@@ -70,14 +73,14 @@ CREATE TABLE system_income (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 系统设置表
-CREATE TABLE system_settings (
+CREATE TABLE cs_system_settings (
     `key` VARCHAR(50) PRIMARY KEY,
     `value` TEXT NOT NULL,
     updated_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 系统通知表
-CREATE TABLE system_notifications (
+CREATE TABLE cs_system_notifications (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
@@ -86,18 +89,17 @@ CREATE TABLE system_notifications (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 用户日志表
-CREATE TABLE user_logs (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
+CREATE TABLE cs_user_logs (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
     action VARCHAR(50) NOT NULL,
-    details TEXT,
-    ip_address VARCHAR(45),
+    ip_address VARCHAR(45) NOT NULL,
     created_at DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES cs_users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 备份日志表
-CREATE TABLE backup_logs (
+CREATE TABLE cs_backup_logs (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     filename VARCHAR(100) NOT NULL,
     size BIGINT UNSIGNED NOT NULL,

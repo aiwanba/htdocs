@@ -67,4 +67,14 @@ if (!function_exists('check_permission')) {
         // TODO: 实现具体的权限检查逻辑
         return true;
     }
+}
+
+// 检查用户是否已登录
+if (!function_exists('check_login')) {
+    function check_login() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit;
+        }
+    }
 } 

@@ -1,14 +1,15 @@
 <?php
 require_once 'lib/database.php';
 require_once 'lib/utils.php';
+require_once 'lib/security.php';
 
 $error = '';
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!verify_csrf_token($_POST['csrf_token'])) {
-        $error = '无效的请求';
-    } else {
+    try {
+        verify_csrf_request();
+        
         $username = clean_input($_POST['username']);
         $email = clean_input($_POST['email']);
         $password = clean_input($_POST['password']);
@@ -27,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $db = Database::getInstance()->getConnection();
             
             // 检查用户名是否已存在
-            $stmt = $db->prepare("SELECT id FROM users WHERE username = ?");
+            $stmt = $db->prepare("SELECT id FROM cs_users WHERE username = ?");
             $stmt->execute([$username]);
             if ($stmt->rowCount() > 0) {
                 $error = '用户名已被使用';
             } else {
                 // 检查邮箱是否已存在
-                $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+                $stmt = $db->prepare("SELECT id FROM cs_users WHERE email = ?");
                 $stmt->execute([$email]);
                 if ($stmt->rowCount() > 0) {
                     $error = '邮箱已被注册';
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // 创建用户
                     try {
                         $stmt = $db->prepare(
-                            "INSERT INTO users (username, email, password, status, created_at, updated_at)
+                            "INSERT INTO cs_users (username, email, password, status, created_at, updated_at)
                              VALUES (?, ?, ?, 'active', NOW(), NOW())"
                         );
                         $hash = generate_password_hash($password);
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         
                         // 记录日志
                         $stmt = $db->prepare(
-                            "INSERT INTO user_logs (user_id, action, ip_address, created_at)
+                            "INSERT INTO cs_user_logs (user_id, action, ip_address, created_at)
                              VALUES (?, 'register', ?, NOW())"
                         );
                         $stmt->execute([$_SESSION['user_id'], $_SERVER['REMOTE_ADDR']]);
@@ -70,6 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
+    } catch (Exception $e) {
+        $error = $e->getMessage();
     }
 }
 

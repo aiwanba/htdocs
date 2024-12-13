@@ -1,14 +1,15 @@
 <?php
 require_once 'lib/database.php';
 require_once 'lib/utils.php';
+require_once 'lib/security.php';
 
 $error = '';
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!verify_csrf_token($_POST['csrf_token'])) {
-        $error = '无效的请求';
-    } else {
+    try {
+        verify_csrf_request();
+        
         $username = clean_input($_POST['username']);
         $password = clean_input($_POST['password']);
         
@@ -19,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             $stmt = $db->prepare(
                 "SELECT id, username, password, balance, status 
-                 FROM users 
+                 FROM cs_users 
                  WHERE username = ?"
             );
             $stmt->execute([$username]);
@@ -35,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     // 更新最后登录时间
                     $stmt = $db->prepare(
-                        "UPDATE users SET last_active = NOW() WHERE id = ?"
+                        "UPDATE cs_users SET last_active = NOW() WHERE id = ?"
                     );
                     $stmt->execute([$user['id']]);
                     
                     // 记录登录日志
                     $stmt = $db->prepare(
-                        "INSERT INTO user_logs (user_id, action, ip_address, created_at)
+                        "INSERT INTO cs_user_logs (user_id, action, ip_address, created_at)
                          VALUES (?, 'login', ?, NOW())"
                     );
                     $stmt->execute([$user['id'], $_SERVER['REMOTE_ADDR']]);
@@ -53,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error = '用户名或密码错误';
             }
         }
+    } catch (Exception $e) {
+        $error = $e->getMessage();
     }
 }
 

@@ -19,6 +19,28 @@ body {
     padding: 0 15px;
 }
 
+/* 主内容区域 - 添加顶部边距以避免被固定头部遮挡 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 页面主体内容 */
+.main-content {
+    padding-top: 60px;  /* 与头部高度相同 */
+}
+
+/* 修改其他页面的顶部边距 */
+.market-page,
+.company-list,
+.company-form,
+.company-detail,
+.auth-form,
+.profile-form {
+    margin-top: 20px;  /* 减小顶部边距，因为已经有了 main-content 的 padding */
+}
+
 /* 头部导航 */
 .main-header {
     background: #fff;
@@ -279,4 +301,512 @@ body {
     .profile-form {
         margin: 60px 15px 20px;
     }
+} 
+
+/* 公司列表样式 */
+.company-list {
+    padding: 20px 0;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-create {
+    padding: 8px 16px;
+    background: #28a745;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn-create:hover {
+    background: #218838;
+}
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.company-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.company-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.company-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.company-status.active {
+    background: #e8f5e9;
+    color: #28a745;
+}
+
+.company-status.delisted {
+    background: #ffebee;
+    color: #dc3545;
+}
+
+.company-info {
+    margin-bottom: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.not-listed {
+    text-align: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    color: #6c757d;
+}
+
+.company-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.company-actions .btn {
+    flex: 1;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s;
+} 
+
+/* 公司表单样式 */
+.company-form {
+    max-width: 600px;
+    margin: 80px auto 20px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.company-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.company-form textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 10px;
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+} 
+
+/* 公司详情样式 */
+.company-detail {
+    margin: 80px 0 20px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.info-section {
+    margin-bottom: 30px;
+}
+
+.info-section h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stock-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.stock-status.active {
+    background: #e8f5e9;
+    color: #28a745;
+}
+
+.stock-status.suspended {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.stock-status.delisted {
+    background: #ffebee;
+    color: #dc3545;
+}
+
+.transaction-list {
+    overflow-x: auto;
+}
+
+.transaction-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-list th,
+.transaction-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.transaction-list th {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+.transaction-list tr:hover {
+    background: #f8f9fa;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+} 
+
+/* 市场页面样式 */
+.market-page {
+    margin: 80px 0 20px;
+}
+
+.market-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.market-stats .stat-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.market-stats label {
+    display: block;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.market-stats span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stock-list {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.stock-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-list th,
+.stock-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.stock-list th {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+.stock-list tr:hover {
+    background: #f8f9fa;
+}
+
+.stock-list .up {
+    color: #28a745;
+}
+
+.stock-list .down {
+    color: #dc3545;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin: 0 2px;
+} 
+
+/* 首页样式 */
+.market-overview {
+    padding: 20px 0;
+}
+
+.market-overview .market-stats {
+    margin-bottom: 40px;
+}
+
+.hot-stocks,
+.latest-ipos {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.hot-stocks h2,
+.latest-ipos h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 18px;
+}
+
+.empty-list {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    background: #f8f9fa;
+    border-radius: 4px;
+} 
+
+/* IPO申请表单样式 */
+.ipo-form {
+    max-width: 600px;
+    margin: 80px auto 20px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.ipo-form h2 {
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+}
+
+.ipo-form .form-group {
+    margin-bottom: 25px;
+}
+
+.ipo-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.ipo-form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.ipo-form input[type="number"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.ipo-form small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 12px;
+}
+
+.ipo-form .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.ipo-form .btn-submit {
+    flex: 1;
+    padding: 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.ipo-form .btn-submit:hover {
+    background: #218838;
+} 
+
+/* 公司列表页面样式 */
+.company-list-page {
+    padding: 20px 0;
+}
+
+.company-list-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.company-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.company-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.company-header h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.company-header h3 a:hover {
+    color: #007bff;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.status.listed {
+    background: #e8f5e9;
+    color: #28a745;
+}
+
+.status.unlisted {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.company-info {
+    margin-bottom: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.info-item label {
+    color: #666;
+}
+
+.company-description {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.no-description {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.company-actions {
+    display: flex;
+    gap: 10px;
 } 
