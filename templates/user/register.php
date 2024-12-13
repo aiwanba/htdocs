@@ -16,6 +16,7 @@
             <?php endif; ?>
             
             <form method="POST" action="/register.php">
+                <?php echo csrf_field(); ?>
                 <div class="form-group">
                     <label>用户名:</label>
                     <input type="text" name="username" value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>" required>

@@ -49,4 +49,22 @@ if (!function_exists('verify_password')) {
     function verify_password($password, $hash) {
         return password_verify($password, $hash);
     }
+}
+
+if (!function_exists('generate_random_string')) {
+    // 生成随机字符串
+    function generate_random_string($length = 10) {
+        return bin2hex(random_bytes($length));
+    }
+}
+
+if (!function_exists('check_permission')) {
+    // 检查用户权限
+    function check_permission($permission) {
+        if (!isset($_SESSION['user_id'])) {
+            return false;
+        }
+        // TODO: 实现具体的权限检查逻辑
+        return true;
+    }
 } 

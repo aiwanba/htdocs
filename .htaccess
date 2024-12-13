@@ -1,0 +1,32 @@
+RewriteEngine On
+
+# 如果请求的不是真实文件或目录，则重定向到 index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 设置默认字符集
+AddDefaultCharset UTF-8
+
+# 禁止访问敏感文件和目录
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(sql|log|yaml|ini|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 禁止访问特定目录
+RedirectMatch 403 ^/config/.*$
+RedirectMatch 403 ^/lib/.*$
+RedirectMatch 403 ^/includes/.*$
+RedirectMatch 403 ^/templates/.*$
+
+# PHP 设置
+php_value upload_max_filesize 5M
+php_value post_max_size 8M
+php_value max_execution_time 30
+php_value max_input_time 60 

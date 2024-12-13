@@ -1,70 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo SITE_NAME; ?> - 个人资料</title>
+    <title>个人资料 - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="/assets/css/main.css">
 </head>
 <body>
-    <?php include 'includes/common/header.php'; ?>
+    <?php include 'templates/common/header.php'; ?>
     
-    <div class="profile-container">
-        <h2>个人资料</h2>
-        
-        <?php if (isset($message)): ?>
-            <div class="message <?php echo $success ? 'success' : 'error'; ?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
-        
-        <div class="profile-info">
-            <h3>基本信息</h3>
-            <form method="POST" action="/user/profile.php">
-                <input type="hidden" name="action" value="update_profile">
-                
+    <div class="container">
+        <div class="profile-form">
+            <h2>个人资料</h2>
+            
+            <?php if ($error): ?>
+                <div class="alert alert-error"><?php echo $error; ?></div>
+            <?php endif; ?>
+            
+            <?php if ($success): ?>
+                <div class="alert alert-success"><?php echo $success; ?></div>
+            <?php endif; ?>
+            
+            <form method="POST" action="/user/profile">
                 <div class="form-group">
                     <label>用户名:</label>
-                    <input type="text" value="<?php echo $user_data['username']; ?>" readonly>
+                    <input type="text" value="<?php echo htmlspecialchars($user['username']); ?>" disabled>
+                    <small>用户名不可修改</small>
                 </div>
                 
                 <div class="form-group">
-                    <label>电子邮箱:</label>
-                    <input type="email" name="email" value="<?php echo $user_data['email']; ?>" required>
+                    <label>邮箱:</label>
+                    <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>账户余额:</label>
-                    <input type="text" value="<?php echo format_money($user_data['balance']); ?>" readonly>
-                </div>
-                
-                <div class="form-group">
-                    <label>注册时间:</label>
-                    <input type="text" value="<?php echo $user_data['created_at']; ?>" readonly>
-                </div>
-                
-                <button type="submit">更新资料</button>
-            </form>
-        </div>
-        
-        <div class="change-password">
-            <h3>修改密码</h3>
-            <form method="POST" action="/user/profile.php">
-                <input type="hidden" name="action" value="change_password">
-                
-                <div class="form-group">
-                    <label>原密码:</label>
-                    <input type="password" name="old_password" required>
+                    <label>当前密码:</label>
+                    <input type="password" name="current_password" required>
                 </div>
                 
                 <div class="form-group">
                     <label>新密码:</label>
-                    <input type="password" name="new_password" required minlength="6">
+                    <input type="password" name="new_password" minlength="6">
+                    <small>如不修改密码请留空</small>
                 </div>
                 
-                <button type="submit">修改密码</button>
+                <div class="form-group">
+                    <label>确认新密码:</label>
+                    <input type="password" name="confirm_password">
+                </div>
+                
+                <button type="submit" class="btn-submit">保存修改</button>
             </form>
+            
+            <div class="profile-info">
+                <h3>账户信息</h3>
+                <div class="info-item">
+                    <label>账户余额:</label>
+                    <span><?php echo format_money($user['balance']); ?></span>
+                </div>
+                <div class="info-item">
+                    <label>注册时间:</label>
+                    <span><?php echo format_datetime($user['created_at']); ?></span>
+                </div>
+                <div class="info-item">
+                    <label>最后登录:</label>
+                    <span><?php echo format_datetime($user['last_active']); ?></span>
+                </div>
+            </div>
         </div>
     </div>
     
-    <?php include 'includes/common/footer.php'; ?>
+    <?php include 'templates/common/footer.php'; ?>
 </body>
 </html> 
