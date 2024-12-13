@@ -104,4 +104,20 @@ CREATE TABLE cs_backup_logs (
     filename VARCHAR(100) NOT NULL,
     size BIGINT UNSIGNED NOT NULL,
     created_at DATETIME NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 用户持仓表
+CREATE TABLE cs_holdings (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id BIGINT UNSIGNED NOT NULL,
+    stock_id BIGINT UNSIGNED NOT NULL,
+    amount BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_user_stock (user_id, stock_id),
+    KEY idx_user_id (user_id),
+    KEY idx_stock_id (stock_id),
+    FOREIGN KEY (user_id) REFERENCES cs_users(id),
+    FOREIGN KEY (stock_id) REFERENCES cs_stocks(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; 

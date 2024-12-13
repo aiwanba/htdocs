@@ -3,6 +3,9 @@
 if (!function_exists('format_money')) {
     // 格式化金额
     function format_money($amount) {
+        if (empty($amount)) {
+            $amount = 0;
+        }
         return '¥' . number_format($amount, 2);
     }
 }
@@ -23,6 +26,9 @@ if (!function_exists('format_size')) {
 if (!function_exists('format_datetime')) {
     // 格式化日期时间
     function format_datetime($datetime) {
+        if (empty($datetime)) {
+            return '';
+        }
         return date('Y-m-d H:i:s', strtotime($datetime));
     }
 }
